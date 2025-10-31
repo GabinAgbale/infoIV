@@ -1,6 +1,5 @@
-# Info-IV Project
+# InfoIV
 
-This repository contains the **Info-IV** project.
 
 ## Setup
 
