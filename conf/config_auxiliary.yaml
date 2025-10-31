@@ -1,0 +1,50 @@
+seed: 3
+checkpoint_path: ""
+expe_name: "gaussian_nonlinear/aux_gamma5"
+
+
+dataset:
+  path: 
+  dimA: 8
+  dimZ: 6
+  dimX: 12
+  dimY: 1
+  alpha: 1 # Z =  A @ M + alpha * V
+  batch_size: 64
+  n: 5000
+  n_contrastive_pairs: 1 # number of contrastive pairs per sample
+  # total number of samples: n * (1 + n_contrastive_pairs)
+  
+  causal_effect: "nonlinear" # "linear" or "nonlinear"
+  noise_distribution: "gaussian" # "uniform" or "gaussian"
+  gamma_train: 0 # uniform distrib range or gaussian mean
+  gamma_test: 5
+
+  hidden_dim: 16
+  n_layers: 2
+
+  M0:
+
+model:
+  encoder:
+    hidden_dim: 32
+    num_layers: 3
+  head:
+    hidden_dim: 32
+    num_layers: 3
+
+loss:
+  kernel: "gaussian"
+  l: 1e2 # regularization stength for reconstruction term (over contrastive term)
+
+
+optimizer:
+  name: "adam" #ToDo: 
+  lr: 0.01
+
+trainer:
+  root_dir: "logs"
+  devices: 1
+  accelerator: "mps"
+  max_epochs: 50
+  test_freq: 0

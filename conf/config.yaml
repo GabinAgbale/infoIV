@@ -1,0 +1,50 @@
+seed: 1
+checkpoint_path: ""
+expe_name: "rep4ex_dep/mmr"
+
+type: "mmr" # "vanilla", "mmr", or "vae"
+
+
+dataset:
+  path:
+  dimA: 10
+  dimZ: 8
+  dimX: 12
+  dimY: 1
+  alpha: 1
+  
+  causal_effect: "nonlinear" # "linear" or "nonlinear"
+  noise_distribution: "gaussian" # "uniform" or "gaussian"
+  noise_indep: False # if True, V are mutually independent
+  gamma_train: 0
+  gamma_test: 0
+
+  batch_size: 64
+  n: 10000
+
+  hidden_dim: 16
+  n_layers: 2
+
+  shifts: [0,1,2,3,4,5,6,7,8,9]
+
+
+model:
+  hidden_dim: 32
+  num_layers: 3
+
+loss:
+  kernel: "gaussian"
+  l: 1e2 # regularization stength for reconstruction loss
+  sigma_kernel: 1.0 # bandwidth for the Gaussian kernel used in MMR loss
+
+optimizer:
+  name: "adam" #ToDo: 
+  lr: 0.01
+
+trainer:
+  root_dir: "logs"
+  devices: 1
+  accelerator: "mps"
+  max_epochs: 50
+  test_freq: 0
+  max_epochs_cv: 1 # for second step (control variable)

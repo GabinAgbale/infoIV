@@ -1,0 +1,58 @@
+seed: 3
+checkpoint_path: ""
+expe_name: "imca_linear/auxiliary/"
+
+device: "cuda:1"
+n_workers: 1
+
+dataset:
+  path: 
+  dimA: 8
+  dimZ: 6
+  dimX: 12
+  dimY: 1
+
+  batch_size: 64
+  n: 5000
+  n_contrastive_pairs: 1 # number of contrastive pairs per sample
+  # total number of samples: n * (1 + n_contrastive_pairs)
+  
+  n_val: 1000
+
+  causal_effect: "linear" # "linear" or "nonlinear"
+
+  confounding_strength: 1.
+  indep_latents: False
+
+  # mixing parameters gO: Z -> X
+  hidden_dim: 16
+  n_layers: 2
+
+
+model:
+
+  encoder:
+    hidden_dims: [16,32,64]
+    num_layers: 3
+    dropout_rate: 0.2
+    activation: "leaky_relu"
+  head:
+    hidden_dim: 16
+    num_layers: 2
+
+loss:
+  kernel: "gaussian"
+  l: 0 # regularization stength for reconstruction term (over contrastive term)
+
+
+optimizer:
+  name: "adam" #ToDo: 
+  lr: 0.001
+  scheduler: "plateau" # "cosine" or "step"
+  weight_decay: 1e-5
+
+trainer:
+  root_dir: "logs"
+  devices: 1
+  max_epochs: 1
+

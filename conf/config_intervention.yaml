@@ -1,0 +1,56 @@
+seed: 1
+checkpoint_path: ""
+expe_name: "rep4ex_intervention/oracle"
+
+type: "oracle" # "mmr", "nce" or "oracle"
+
+
+dataset:
+  path:
+  dimA: 4
+  dimZ: 2
+  dimX: 4
+  dimY: 1
+  alpha: 1
+  
+  causal_effect: "nonlinear" # "linear" or "nonlinear"
+  noise_indep: True # if True, V are mutually independent
+
+  gamma_train: 1
+  gamma_test: 3
+
+  batch_size: 64
+  n: 10000
+
+  hidden_dim: 16
+  n_layers: 2
+
+  shifts: [0,1,2,3,4]
+
+
+model:
+  hidden_dim: 32
+  num_layers: 3
+
+
+loss:
+  kernel: "gaussian"
+  l: 0 # regularization stength for reconstruction loss
+  sigma_kernel: 1.0 # bandwidth for the Gaussian kernel used in MMR loss
+  temperature: 0.7 # temperature for NCE loss
+
+  
+optimizer:
+  name: "adam" #ToDo: 
+  lr: 0.001
+  scheduler: "none"
+  weight_decay: 0
+
+
+trainer:
+  root_dir: "logs"
+  devices: 1
+  accelerator: "mps"
+  max_epochs: 50
+  test_freq: 0
+  max_epochs_cv: 50 # for second step (control variable)

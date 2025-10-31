@@ -1,0 +1,52 @@
+seed: 6
+checkpoint_path: ""
+expe_name: "r2_score/nce"
+
+device: "cuda:0"
+n_workers: 1
+
+dataset:
+  path: 
+  dimA: 6
+  dimZ: 4
+  dimX: 12
+  dimY: 1
+  alpha: 1 # Z =  A @ M + alpha * V
+  confounding_strength: 1.0 # scaling factor for the confounding effect
+  batch_size: 64
+  n: 10000
+  
+  causal_effect: "nonlinear" # "linear" or "nonlinear"
+  noise_distribution: "gaussian" # "uniform" or "gaussian"
+  noise_indep: True # if True, V are mutually independent
+  gamma_train: 0
+  gamma_test: 0
+
+  hidden_dim: 16
+  n_layers: 2
+
+  M0: 
+
+  
+model:
+  activation: "leaky_relu"
+  hidden_dims: [16,32,64]
+  dropout_rate: 0.2
+  num_layers: 3
+
+loss:
+  kernel: "gaussian"
+  l: 0  # regularization stength for reconstuction term (over contrastive)
+  temperature: 0.7 # temperature for the InfoNCE loss
+
+optimizer:
+  name: "adam" #ToDo: 
+  lr: 0.01
+  scheduler: "none" # "plateau" or "none"
+  weight_decay: 0
+
+trainer:
+  root_dir: "logs"
+  devices: 1
+  accelerator: "mps"
+  max_epochs: 50

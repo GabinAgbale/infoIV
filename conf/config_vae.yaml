@@ -1,0 +1,47 @@
+seed: 6
+checkpoint_path: ""
+expe_name: "gaussian_nonlinear/vae_gamma5"
+
+
+dataset:
+  path: 
+  dimA: 8
+  dimZ: 6
+  dimX: 10
+  dimY: 1
+  alpha: 1 # Z =  A @ M + alpha * V
+  
+  batch_size: 64
+  n: 10000
+  
+  causal_effect: "nonlinear" # "linear" or "nonlinear"
+  noise_distribution: "gaussian" # "uniform" or "gaussian"
+  gamma_train: 5
+  gamma_test: 5
+
+  hidden_dim: 16
+  n_layers: 2
+
+  M0: 
+
+  confounding_strength: 1.0 # scaling factor for the confounding effect
+
+model:
+  hidden_dim: 32
+  num_layers: 3
+
+loss:
+  kernel: "gaussian"
+  l: 1e-3  # regularization stength for reconstuction term (over contrastive)
+
+optimizer:
+  name: "adam" #ToDo: 
+  lr: 0.001
+  scheduler: "none" # "plateau" or "none"
+  weight_decay: 1e-5
+
+trainer:
+  root_dir: "logs"
+  devices: 1
+  accelerator: "mps"
+  max_epochs: 100

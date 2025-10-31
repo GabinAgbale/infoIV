@@ -1,0 +1,44 @@
+seed: 1
+checkpoint_path: "gaussian_648_iv/oracleZ"
+expe_name: "logs/gaussian_648/nce/version_0"
+
+
+dataset:
+  dimA: 6
+  dimZ: 4
+  dimX: 8
+  dimY: 1
+  alpha: 1 # Z = alpha * A @ M + V
+ 
+  batch_size: 64
+  n: 10000
+  n_contrastive_pairs: 1 # number of contrastive pairs per sample
+  # total number of samples: n * (1 + n_contrastive_pairs)
+
+  causal_effect: "linear" # "linear" or "nonlinear"
+  noise_distribution: "gaussian" # "uniform" or "gaussian"
+  gamma_train: 0
+  gamma_test: 0
+
+  hidden_dim: 16
+  n_layers: 2
+
+
+model:
+  head:
+    hidden_dim: 32
+    num_layers: 3
+
+loss:
+  kernel: "gaussian"
+
+optimizer:
+  name: "adam" #ToDo: 
+  lr: 0.01
+
+trainer:
+  root_dir: "logs"
+  devices: 1
+  accelerator: "mps"
+  max_epochs: 10
+  test_freq: 0

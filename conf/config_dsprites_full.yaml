@@ -1,0 +1,71 @@
+seed: 42
+checkpoint_path: ""
+expe_name: "dsprites_conf02/"
+
+# Device settings
+device: "cuda:3"
+num_workers: 0
+
+# Dataset settings
+dataset:
+  batch_size: 64
+  confounding_strength: 0.2
+
+n_train: 5000
+n_val: 1000
+
+
+
+# Model settings
+model:
+  step1:
+    activation: "leaky_relu"
+    hidden_dims: [32, 64, 128, 256]
+    dropout_rate: 0.2
+    slope: 0.2
+  step2:
+    activation: "leaky_relu"
+    hidden_dims: [16, 32, 64]
+    num_layers: 3
+    dropout_rate: 0.2
+    slope: 0.2
+  step3:
+    activation: "relu"
+    hidden_dims: [16, 32]
+    num_layers: 2
+    dropout_rate: 0
+    slope: 0.2
+
+# Loss settings
+loss:
+  lambda_recon: 0
+  temperature: 0.3
+
+# Optimizer settings
+optimizer:
+  step1:
+    name: "adam"
+    lr: 0.001
+    weight_decay: 0
+    scheduler: "plateau"
+  step2:
+    name: "adam"
+    lr: 0.001
+    weight_decay: 1e-5
+    scheduler: "plateau"
+  step3:
+    name: "adam"
+    lr: 0.001
+    weight_decay: 1e-5
+    scheduler: "plateau"
+
+# Trainer settings
+trainer:
+  root_dir: "logs"
+  devices: 1
+  step1:
+    max_epochs: 20
+  step2:
+    max_epochs: 50
+  step3:
+    max_epochs: 50

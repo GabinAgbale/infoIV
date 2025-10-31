@@ -1,0 +1,86 @@
+seed:  69
+checkpoint_path: ""
+expe_name: "imca_nce_epoch100_conf08/"
+
+device: "cuda:3"
+n_workers: 1
+
+dataset:
+  path: 
+  dimA: 12
+  dimZ: 10
+  dimX: 16
+  dimY: 1
+  alpha: 1 # Z =  A @ M + alpha * V
+  
+  batch_size: 64
+  n: 5000 # increase batch size 
+
+  n_val: 1000
+  
+  causal_effect: "nonlinear" # "linear" or "nonlinear"
+  noise_distribution: "gaussian" # "uniform" or "gaussian"
+  indep_latents: False # if True, V are mutually independent
+
+  # mixing parameters gO: Z -> X
+  hidden_dim: 16
+  n_layers: 2
+
+  confounding_strength: 0.8 # scaling factor for the confounding effect
+
+model:
+  step1: # encoder parameters
+    hidden_dim: [16,32,64,128]
+    num_layers: 4
+    activation: "leaky_relu"
+    dropout_rate: 0.2
+    slope: 0.1
+
+  step2: # instrument -> estimated features
+    hidden_dim: [32,64,128]
+    num_layers: 3
+    activation: "leaky_relu"
+    dropout_rate: 0.2 
+    slope: 0.1
+
+  step3: # causal effect estimation
+    hidden_dim: [16, 32, 64]
+    num_layers: 3
+    activation: "relu"
+    dropout_rate: 0.2
+    slope: 0.1
+
+loss:
+  kernel: "gaussian"
+  l: 0  # regularization stength for reconstuction term (over contrastive)
+  temperature: 0.3 # temperature for the InfoNCE loss
+
+optimizer:
+  step1:
+    name: "adam" #ToDo: 
+    lr: 0.001
+    scheduler: "plateau" # "plateau" or "none"
+    weight_decay: 0
+
+  step2:
+    name: "adam" #ToDo: 
+    lr: 0.001
+    scheduler: "plateau" # "plateau" or "none"
+    weight_decay: 0
+
+  step3:
+    name: "adam" #ToDo: 
+    lr: 0.001
+    scheduler: "plateau" # "plateau" or "none"
+    weight_decay: 1e-5
+
+trainer:
+  root_dir: "logs"
+  devices: 1
+  
+  step1:
+    max_epochs: 30
+  step2:
+    max_epochs: 50
+  step3:
+    max_epochs: 100

@@ -1,0 +1,93 @@
+seed: 1
+checkpoint_path: ""
+expe_name: "extrapolation/oracle"
+expe_path: ""
+
+type: "oracle" # "nce" or "aux" or "oracle"
+iv_type: "cf" # "cf" for control function, "2s" for 2 stages Least Squares
+device: "cuda:0"
+
+dataset:
+  path: 
+  dimA: 6
+  dimZ: 4
+  dimX: 12
+  dimY: 1
+  alpha: 1 # Z = alpha * A @ M + V
+  
+  confounding_strength: 1.0 # scaling factor for the confounding effect
+  batch_size: 64
+  n: 10000
+  
+  causal_effect: "nonlinear" # "linear" or "nonlinear" or "sin"
+  linear_type: "" 
+  noise_distribution: "uniform" # "uniform" or "gaussian"
+  gamma_train: 1
+  gamma_test: 3
+
+  hidden_dim: 16
+  n_layers: 2
+
+  shifts: [0,1,2,3,4,5] # shifts to apply to the data
+
+model:
+  step1: # encoder parameters
+    hidden_dim: [16,32,64]
+    num_layers: 3
+    activation: "leaky_relu"
+    dropout_rate: 0.2
+    slope: 0.1
+
+  step2: # instrument -> estimated features
+    hidden_dim: [16,32,64]
+    num_layers: 3
+    activation: "leaky_relu"
+    dropout_rate: 0.2 
+    slope: 0.1
+
+  step3: # causal effect estimation
+    hidden_dim: [16, 32]
+    num_layers: 2
+    activation: "leaky_relu"
+    dropout_rate: 0.2
+    slope: 0.1
+
+loss:
+  temperature: 0.3 
+  kernel: "gaussian"
+  l: 0 # regularization strength for reconstruction term (over contrastive term)
+  lambda_lasso: 0 # regularization strength for lasso term
+  
+
+optimizer:
+  step1:
+    name: "adam" #ToDo: 
+    scheduler: "none" 
+    weight_decay: 0
+    lr: 0.001
+
+
+  step2:
+    name: "adam"
+    scheduler: "plateau"
+    weight_decay: 0
+    lr: 0.01
+
+  step3:
+    name: "adam"
+    scheduler: "none"
+    weight_decay: 0
+    lr: 0.001
+
+trainer:
+  root_dir: "logs"
+  devices: 1
+  accelerator: "mps"
+  step1:
+    max_epochs: 50
+
+  step2:
+    max_epochs: 50
+
+  step3:
+    max_epochs: 50
