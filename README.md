@@ -1,5 +1,7 @@
 # InfoIV
 
+Implementation of [Recovering Causal Features for Instrumental Variable Regression with Contrastive Learning](https://openreview.net/forum?id=3qOdzEUKHZ&noteId=3qOdzEUKHZ)
+
 
 ## Setup
 
